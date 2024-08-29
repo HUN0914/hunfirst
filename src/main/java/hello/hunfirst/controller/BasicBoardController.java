@@ -29,11 +29,16 @@ public class BasicBoardController {
 
     @GetMapping("{boardId}")
     public String board(@PathVariable long boardId, Model model){
-        Optional<Board> board = boardService.findById(boardId);
-        model.addAttribute("board", board);
+        Optional<Board> boardOptional = boardService.findById(boardId);
+        if (boardOptional.isPresent()) {
+            model.addAttribute("board", boardOptional.get());
+        } else {
+            // 예외 처리나 오류 페이지로 리다이렉트
+            return "error/404"; // 적절한 오류 처리
+        }
         return "basic/board";
-
     }
+
 
     @GetMapping("/add")
     public String addForm(){
@@ -53,7 +58,12 @@ public class BasicBoardController {
     @GetMapping("/{boardId}/edit")
     public String editForm(@PathVariable long boardId, Model model){
         Optional<Board> board = boardService.findById(boardId);
-        model.addAttribute("board", board);
+        if (board.isPresent()) {
+            model.addAttribute("board", board.get());
+        } else {
+            // 예외 처리나 오류 페이지로 리다이렉트
+            return "error/404";// 적절한 오류 처리
+        }
         return "basic/editForm";
     }
 
@@ -62,15 +72,5 @@ public class BasicBoardController {
         boardService.update(boardId, board);
         return "redirect:/basic/boards/{boardId}";
     }
-
-
-
-
-
-
-
-
-
-
 
 }
