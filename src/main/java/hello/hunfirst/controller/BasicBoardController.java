@@ -2,6 +2,7 @@ package hello.hunfirst.controller;
 
 import hello.hunfirst.model.Board;
 import hello.hunfirst.repository.BoardRepository;
+import hello.hunfirst.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/basic/boards")
@@ -16,6 +18,7 @@ import java.util.List;
 public class BasicBoardController {
 
     private final BoardRepository boardRepository;
+    private final BoardService boardService;
 
     @GetMapping
     public String boards(Model model){
@@ -26,7 +29,7 @@ public class BasicBoardController {
 
     @GetMapping("{boardId}")
     public String board(@PathVariable long boardId, Model model){
-        Board board = boardRepository.findById(boardId);
+        Optional<Board> board = boardService.findById(boardId);
         model.addAttribute("board", board);
         return "basic/board";
 
@@ -49,14 +52,14 @@ public class BasicBoardController {
     //상품 수정
     @GetMapping("/{boardId}/edit")
     public String editForm(@PathVariable long boardId, Model model){
-        Board board = boardRepository.findById(boardId);
+        Optional<Board> board = boardService.findById(boardId);
         model.addAttribute("board", board);
         return "basic/editForm";
     }
 
     @PostMapping("/{boardId}/edit")
     public String edit(@PathVariable Long boardId, @ModelAttribute Board board){
-        boardRepository.update(boardId, board);
+        boardService.update(boardId, board);
         return "redirect:/basic/boards/{boardId}";
     }
 
