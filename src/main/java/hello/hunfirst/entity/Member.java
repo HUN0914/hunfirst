@@ -1,31 +1,31 @@
 package hello.hunfirst.entity;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.Data;
+import jakarta.validation.constraints.NotNull;  // 유효성 검사를 위한 올바른 @NotNull 패키지
 
 @Entity
-@Getter
-@Setter
+@Data
 public class Member {
 
-
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "MEMBER_ID")
     private Long id;
 
-    public void setId(Long id) {
-        this.id = id;
+    @NotNull
+    @Column(nullable = false)
+    private String userId;
+
+    @NotNull
+    @Column(nullable = false)
+    private String password;
+
+    @NotNull
+    @Column(nullable = false)
+    private String name;
+
+    // 기본 생성자 (JPA에서 필수)
+    public Member() {
     }
-
-    public Long getId() {
-        return id;
-    }
-
-
-
 }
