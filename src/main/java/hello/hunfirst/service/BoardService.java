@@ -1,7 +1,8 @@
 package hello.hunfirst.service;
 
-import hello.hunfirst.model.Board;
+import hello.hunfirst.entity.Board;
 import hello.hunfirst.repository.BoardRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
+
 
     private final BoardRepository boardRepository;
 

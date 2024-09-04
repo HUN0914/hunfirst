@@ -1,6 +1,6 @@
 package hello.hunfirst.controller;
 
-import hello.hunfirst.model.Board;
+import hello.hunfirst.entity.Board;
 import hello.hunfirst.repository.BoardRepository;
 import hello.hunfirst.service.BoardService;
 import lombok.RequiredArgsConstructor;

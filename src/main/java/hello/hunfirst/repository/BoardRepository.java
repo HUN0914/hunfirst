@@ -1,6 +1,6 @@
 package hello.hunfirst.repository;
 
-import hello.hunfirst.model.Board;
+import hello.hunfirst.entity.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
