@@ -15,9 +15,9 @@ public class MemberController {
 
     private final MemberRepository memberRepository;
 
-  //  @GetMapping("/")
+    @GetMapping("/")
     public String welcome(){
-        return "/home";
+        return "login";
     }
 
     @GetMapping("/signupForm")
@@ -31,7 +31,7 @@ public class MemberController {
     public String signup(@ModelAttribute Member member, Model model){
         memberRepository.save(member);
         model.addAttribute("member", member);
-        return "/home";
+        return "/login";
     }
 
 
