@@ -48,10 +48,13 @@ public class MemberController {
     아니면 로그인 화면으로 이동
 
      */
-    @PostMapping("/login")
+    @PostMapping("/login/loginForm")
     public String login(HttpServletRequest request, Model model){
         String userId=request.getParameter("userId");
         String password=request.getParameter("password");
+
+        System.out.println("userId = " + userId);
+        System.out.println("password = " + password);
 
         //사용자 조회
         Optional<Member> checkId = memberRepository.findByUserId(userId);
@@ -66,6 +69,8 @@ public class MemberController {
 
         }
         else{
+            System.out.println("Login failed.");
+
             model.addAttribute("loginError", "잘못된 접근입니다." );
             return "login/loginForm";
         }
