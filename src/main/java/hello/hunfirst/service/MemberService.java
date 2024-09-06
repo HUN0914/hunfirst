@@ -21,16 +21,16 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Optional<Member> findById(Long id){
-        return memberRepository.findById(id);
+    public Optional<Member> findByUserId(String userId){
+        return memberRepository.findByUserId(userId);
     }
 
     public List<Member> findAll(){
         return memberRepository.findAll();
     }
 
-    public void update(Long MemberId, Member updateParam){
-        Optional<Member> MemberOptional = findById(MemberId);
+    public void update(String userId, Member updateParam){
+        Optional<Member> MemberOptional = findByUserId(userId);
         if(MemberOptional.isPresent()){
             Member member = MemberOptional.get();
             member.setPassword(updateParam.getPassword());

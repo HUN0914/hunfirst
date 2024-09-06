@@ -28,4 +28,8 @@ public class Member {
     // 기본 생성자 (JPA에서 필수)
     public Member() {
     }
+
+    public boolean checkPassword(String password){
+        return this.password.equals(password);
+    }
 }
