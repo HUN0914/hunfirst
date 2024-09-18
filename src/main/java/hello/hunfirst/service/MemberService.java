@@ -1,7 +1,7 @@
 package hello.hunfirst.service;
 
-import hello.hunfirst.entity.Member;
-import hello.hunfirst.repository.MemberRepository;
+import hello.hunfirst.entity.General_Member;
+import hello.hunfirst.repository.General_MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,24 +15,24 @@ import java.util.Optional;
 public class MemberService {
 
 
-    private final MemberRepository memberRepository;
+    private final General_MemberRepository memberRepository;
 
-    public Member save(Member member){
+    public General_Member save(General_Member member){
         return memberRepository.save(member);
     }
 
-    public Optional<Member> findByUserId(String userId){
+    public Optional<General_Member> findByUserId(String userId){
         return memberRepository.findByUserId(userId);
     }
 
-    public List<Member> findAll(){
+    public List<General_Member> findAll(){
         return memberRepository.findAll();
     }
 
-    public void update(String userId, Member updateParam){
-        Optional<Member> MemberOptional = findByUserId(userId);
+    public void update(String userId, General_Member updateParam){
+        Optional<General_Member> MemberOptional = findByUserId(userId);
         if(MemberOptional.isPresent()){
-            Member member = MemberOptional.get();
+            General_Member member = MemberOptional.get();
             member.setPassword(updateParam.getPassword());
             memberRepository.save(member);
         }

@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Getter
-@Setter
 @Table(name="board")
-public class Board {
+public class  Board {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,11 +15,9 @@ public class Board {
     private String content;
 
 
-    public Board(Long id, String boardTitle, String content) {
-        this.id = id;
-        this.boardTitle = boardTitle;
-        this.content = content;
-    }
+    @ManyToOne
+    @JoinColumn(name = "OWNER_MEMBER_ID")  // 외래 키 지정
+    private Owner_Member owner;  // 점주와의 다대일 관계
 
     public Board() {
 

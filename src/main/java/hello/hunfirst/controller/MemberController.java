@@ -1,7 +1,7 @@
 package hello.hunfirst.controller;
 
-import hello.hunfirst.entity.Member;
-import hello.hunfirst.repository.MemberRepository;
+import hello.hunfirst.entity.General_Member;
+import hello.hunfirst.repository.General_MemberRepository;
 import hello.hunfirst.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
 
@@ -19,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberRepository memberRepository;
+    private final General_MemberRepository memberRepository;
 
     @GetMapping("/")
     public String welcome(){
@@ -28,13 +27,13 @@ public class MemberController {
 
     @GetMapping("/login/signupForm")
     public String signupForm(Model model){
-        model.addAttribute("member", new Member());
+        model.addAttribute("member", new General_Member());
         return "login/signupForm";
     }
 
 
     @PostMapping("/login/signupForm")
-    public String signup(@ModelAttribute Member member, Model model){
+    public String signup(@ModelAttribute General_Member member, Model model){
         memberRepository.save(member);
         model.addAttribute("member", member);
         return "redirect:/";
@@ -57,7 +56,7 @@ public class MemberController {
         System.out.println("password = " + password);
 
         //사용자 조회
-        Optional<Member> checkId = memberRepository.findByUserId(userId);
+        Optional<General_Member> checkId = memberRepository.findByUserId(userId);
 
         if(checkId.isPresent()&&checkId.get().getPassword().equals(password))
         {
@@ -74,8 +73,9 @@ public class MemberController {
             model.addAttribute("loginError", "잘못된 접근입니다." );
             return "login/loginForm";
         }
-
     }
+
+
 
 
 }
