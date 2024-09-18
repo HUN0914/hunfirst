@@ -68,8 +68,8 @@ public class BasicBoardController {
     }
 
     @PostMapping("/{boardId}/edit")
-    public String edit(@PathVariable Long boardId, @ModelAttribute Board board){
-        boardService.update(boardId, board);
+    public String edit(@PathVariable Long boardId, @RequestParam String boardTitle, @RequestParam String content) {
+        boardService.update(boardId, boardTitle, content);
         return "redirect:/basic/boards/{boardId}";
     }
 

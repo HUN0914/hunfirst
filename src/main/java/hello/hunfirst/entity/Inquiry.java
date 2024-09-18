@@ -2,7 +2,6 @@ package hello.hunfirst.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -20,7 +19,7 @@ public class Inquiry {
 
     @ManyToOne
     @JoinColumn(name="GENERAL_MEMBER_ID")
-    private General_Member member;
+    private GeneralMember member;
 
 
 }

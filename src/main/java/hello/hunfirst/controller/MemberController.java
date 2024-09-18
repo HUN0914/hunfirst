@@ -1,7 +1,7 @@
 package hello.hunfirst.controller;
 
-import hello.hunfirst.entity.General_Member;
-import hello.hunfirst.repository.General_MemberRepository;
+import hello.hunfirst.entity.GeneralMember;
+import hello.hunfirst.repository.GeneralMemberRepository;
 import hello.hunfirst.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final General_MemberRepository memberRepository;
+    private final GeneralMemberRepository memberRepository;
 
     @GetMapping("/")
     public String welcome(){
@@ -27,13 +27,13 @@ public class MemberController {
 
     @GetMapping("/login/signupForm")
     public String signupForm(Model model){
-        model.addAttribute("member", new General_Member());
+        model.addAttribute("member", new GeneralMember());
         return "login/signupForm";
     }
 
 
     @PostMapping("/login/signupForm")
-    public String signup(@ModelAttribute General_Member member, Model model){
+    public String signup(@ModelAttribute GeneralMember member, Model model){
         memberRepository.save(member);
         model.addAttribute("member", member);
         return "redirect:/";
@@ -56,7 +56,7 @@ public class MemberController {
         System.out.println("password = " + password);
 
         //사용자 조회
-        Optional<General_Member> checkId = memberRepository.findByUserId(userId);
+        Optional<GeneralMember> checkId = memberRepository.findByUserId(userId);
 
         if(checkId.isPresent()&&checkId.get().getPassword().equals(password))
         {
