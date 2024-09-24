@@ -4,16 +4,20 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 
+import java.security.PrivateKey;
+import java.util.List;
+
 @Entity
 @NoArgsConstructor
 public class Inquiry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "Inquiry_ID")
+    private Long inquiryId;
 
     @NotNull
-    private String boardTitle;
+    private String title;
     @NotNull
     private String content;
 
@@ -21,5 +25,7 @@ public class Inquiry {
     @JoinColumn(name="GENERAL_MEMBER_ID")
     private GeneralMember member;
 
+    @OneToMany(mappedBy = "Comment")
+    private List<Comment> commentList;
 
 }

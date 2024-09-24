@@ -16,7 +16,7 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-public class MemberController {
+public class GeneralMemberController {
 
     private final GeneralMemberRepository memberRepository;
 
@@ -56,7 +56,7 @@ public class MemberController {
         System.out.println("password = " + password);
 
         //사용자 조회
-        Optional<GeneralMember> checkId = memberRepository.findByUserId(userId);
+        Optional<GeneralMember> checkId = memberRepository.findById(userId);
 
         if(checkId.isPresent()&&checkId.get().getPassword().equals(password))
         {

@@ -1,17 +1,16 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/hunfirst
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/hunfirst?serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
-
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace

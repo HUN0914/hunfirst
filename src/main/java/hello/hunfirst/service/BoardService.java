@@ -1,45 +1,41 @@
 package hello.hunfirst.service;
 
 import hello.hunfirst.entity.Board;
+import hello.hunfirst.entity.GeneralMember;
 import hello.hunfirst.repository.BoardRepository;
-import jakarta.transaction.Transactional;
+import hello.hunfirst.repository.GeneralMemberRepository;
+import hello.hunfirst.repository.RecruitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
-@RequiredArgsConstructor  // final 필드에 대해 생성자 자동 생성
-@Transactional
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final RecruitRepository recruitRepository;
 
-    public Board save(Board board) {
-        return boardRepository.save(board);
-    }
-
-    public Optional<Board> findById(Long id) {
-        return boardRepository.findById(id);
-    }
-
-    public List<Board> findAll() {
+    public List<Board> findAllBoards() {
         return boardRepository.findAll();
     }
 
-    // 생성자 주입으로 필드 변경 없이 업데이트
-    public void update(Long boardId, String newTitle, String newContent) {
-        Optional<Board> boardOptional = findById(boardId);
-        if (boardOptional.isPresent()) {
-            Board board = boardOptional.get();
-            board.updateBoardTitle(newTitle);  // 제목 업데이트
-            board.updateContent(newContent);  // 내용 업데이트
-            boardRepository.save(board);  // 변경된 엔티티 저장
-        }
+    public Optional<Board> findBoardById(Long id) {
+        return boardRepository.findById(id);
     }
 
-    public void deleteById(Long id) {
-        boardRepository.deleteById(id);
+    public Board saveBoard(Board board) {
+        return boardRepository.save(board);
     }
+
+    public void updateBoard(Long boardId, String content, String newDescription) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new RuntimeException("Board not found"));
+        board.setBoardTitle(content);
+        board.setContent(content);
+        boardRepository.save(board);
+    }
+
 }

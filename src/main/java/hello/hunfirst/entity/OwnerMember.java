@@ -8,34 +8,28 @@ import java.util.List;
 
 @Entity
 @Data
+@NotNull
 public class OwnerMember {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OWNER_MEMBER_ID")
-    private Long id;
-
-    @NotNull
-    @Column(nullable = false)
     private String userId;
 
-    @NotNull
-    @Column(nullable = false)
     private String password;
 
-    @NotNull
-    @Column(nullable = false)
     private String name;
 
-    // 기본 생성자 (JPA에서 필수)
+    private Long ownerNum;
 
-    public OwnerMember() {
-    }
+    @OneToMany
+    @JoinColumn(name = "RECRUIT_ID")
+    private List<Recruit> recruitList;
 
     public boolean checkPassword(String password){
         return this.password.equals(password);
     }
 
-    @OneToMany(mappedBy = "owner")
-    private List<Board> BoardList;
+
+
 }
