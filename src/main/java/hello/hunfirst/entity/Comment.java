@@ -2,9 +2,10 @@ package hello.hunfirst.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 
 @Entity
-@Data
+@Getter
 public class Comment {
 
     @Id
@@ -12,7 +13,7 @@ public class Comment {
     @Column(name="COL_ID")
     private Long comId;
 
-    private String userId;
+    private String content;
 
     @ManyToOne
     @JoinColumn(name="Inquiry_ID")
@@ -21,8 +22,5 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name="GENERAL_MEMBER_ID")
     private GeneralMember generalMember;
-
-
-
 
 }

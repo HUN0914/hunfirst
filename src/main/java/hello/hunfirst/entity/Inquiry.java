@@ -2,6 +2,7 @@ package hello.hunfirst.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.security.PrivateKey;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Inquiry {
 
     @Id
@@ -23,9 +25,9 @@ public class Inquiry {
 
     @ManyToOne
     @JoinColumn(name="GENERAL_MEMBER_ID")
-    private GeneralMember member;
+    private GeneralMember generalMember;
 
-    @OneToMany(mappedBy = "Comment")
+    @OneToMany(mappedBy = "inquiry")
     private List<Comment> commentList;
 
 }
