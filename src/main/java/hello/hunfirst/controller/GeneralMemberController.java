@@ -63,8 +63,7 @@ public class GeneralMemberController {
             session.setAttribute(SessionConst.LOGIN_MEMBER, checkId.get());
 
             // 리다이렉트 구조 짜야함
-           // return "redirect:/basic/boards";
-            return "redirect:/";
+            return "redirect:/recruit/recruits";
 
 
         } else {

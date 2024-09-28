@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recruit 게시글 상세</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .detail-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 500px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .detail-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #495057;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            padding: 12px;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #343a40;
+            word-wrap: break-word;
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 30px;
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="detail-container">
+    <h2>게시글 상세</h2>
+
+    <div class="detail-group">
+        <label>제목</label>
+        <div class="detail-value" th:text="${recruit.title}">제목 내용</div>
+    </div>
+
+    <div class="detail-group">
+        <label>시작 날짜</label>
+        <div class="detail-value" th:text="${recruit.startDate}">시작 날짜 내용</div>
+    </div>
+
+    <div class="detail-group">
+        <label>종료 날짜</label>
+        <div class="detail-value" th:text="${recruit.endDate}">종료 날짜 내용</div>
+    </div>
+
+    <div class="detail-group">
+        <label>내용</label>
+        <div class="detail-value" th:text="${recruit.content}">내용 내용</div>
+    </div>
+
+    <div class="detail-group">
+        <label>선호도</label>
+        <div class="detail-value" th:text="${recruit.favor}">선호도 내용</div>
+    </div>
+
+    <div class="form-actions">
+        <button type="button" onclick="location.href='/recruit/recruits'">목록으로</button>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recruit 게시글 목록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .action-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>게시글 목록</h2>
+
+    <table>
+        <thead>
+        <tr>
+            <th>제목</th>
+            <th>시작 날짜</th>
+            <th>종료 날짜</th>
+            <th>내용</th>
+            <th>선호도</th>
+            <th>상세보기</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Recruit 목록을 반복하며 테이블에 출력 -->
+        <tr th:each="recruit : ${boards}">
+            <td th:text="${recruit.title}">제목</td>
+            <td th:text="${recruit.startDate}">시작 날짜</td>
+            <td th:text="${recruit.endDate}">종료 날짜</td>
+            <td th:text="${recruit.content}">내용</td>
+            <td th:text="${recruit.favor}">선호도</td>
+            <td><a th:href="@{/recruit/recruits/{recruitId}(recruitId=${recruit.recruitId})}">상세보기</a></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="action-links">
+        <a th:href="@{/recruit/recruits/add}">새 게시글 작성</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -34,6 +34,25 @@ public class Recruit {
     private OwnerMember ownerMember;
 
 
+    public void updateRecruit(String title, String content, String startDate, String endDate, String favor) {
+        if (title != null && !title.isEmpty()) {
+            this.title = title;
+        }
+        if (content != null && !content.isEmpty()) {
+            this.content = content;
+        }
+        if (startDate != null && !startDate.isEmpty()) {
+            this.startDate = startDate;
+        }
+        if (endDate != null && !endDate.isEmpty()) {
+            this.endDate = endDate;
+        }
+        if (favor != null && !favor.isEmpty()) {
+            this.favor = favor;
+        }
+    }
+
+
 
 
 }
