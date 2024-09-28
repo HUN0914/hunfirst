@@ -16,11 +16,11 @@ public class Comment {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name="Inquiry_ID")
+    @JoinColumn(name="INQUIRY_ID")
     private Inquiry inquiry;
 
     @ManyToOne
-    @JoinColumn(name="GENERAL_MEMBER_ID")
+    @JoinColumn(name="USER_ID")
     private GeneralMember generalMember;
 
 }

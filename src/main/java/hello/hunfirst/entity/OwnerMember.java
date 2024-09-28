@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.List;
 
@@ -13,9 +14,10 @@ import java.util.List;
 public class OwnerMember {
 
     @Id
-  //  @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "OWNER_MEMBER_ID")
-    private String userId;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "OWNER_ID", updatable = false, nullable = false)
+    private String ownerId;
 
     private String password;
 

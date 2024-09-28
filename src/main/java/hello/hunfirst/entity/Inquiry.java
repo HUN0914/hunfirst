@@ -15,7 +15,7 @@ public class Inquiry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Inquiry_ID")
+    @Column(name = "INQUIRY_ID")
     private Long inquiryId;
 
     @NotNull
@@ -24,7 +24,7 @@ public class Inquiry {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name="GENERAL_MEMBER_ID")
+    @JoinColumn(name="USER_ID")
     private GeneralMember generalMember;
 
     @OneToMany(mappedBy = "inquiry")
