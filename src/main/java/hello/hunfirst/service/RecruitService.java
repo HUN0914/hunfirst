@@ -21,5 +21,12 @@ public class RecruitService {
 
     public List<Recruit> findByTitle(String Title){return recruitRepository.findByTitle(Title);}
 
+    public Recruit findById(Long recruitId){
+        return recruitRepository.findById(recruitId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID입니다. " + recruitId));
+    }
 
+    public void deleteById(Long recruitId) {
+        recruitRepository.deleteById(recruitId);
+    }
 }

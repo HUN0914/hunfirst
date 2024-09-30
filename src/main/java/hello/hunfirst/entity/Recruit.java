@@ -1,14 +1,15 @@
 package hello.hunfirst.entity;
 
+import hello.hunfirst.entity.Liked;
+import hello.hunfirst.entity.OwnerMember;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 import java.util.List;
 
 @Entity
 @Getter
-@NotNull
 public class Recruit {
 
     @Id
@@ -16,14 +17,24 @@ public class Recruit {
     @Column(name = "RECRUIT_ID")
     private Long recruitId;
 
+    @NotBlank(message = "Title is mandatory")
+    @Column(nullable = false)
     private String title;
 
+    @NotBlank(message = "Start Date is mandatory")
+    @Column(nullable = false)
     private String startDate;
 
+    @NotBlank(message = "End Date is mandatory")
+    @Column(nullable = false)
     private String endDate;
 
+    @NotBlank(message = "Content is mandatory")
+    @Column(nullable = false)
     private String content;
 
+    @NotBlank(message = "Favor is mandatory")
+    @Column(nullable = false)
     private String favor;
 
     @OneToMany(mappedBy = "recruit") // Like 엔티티의 recruit 필드와 연결
@@ -32,7 +43,6 @@ public class Recruit {
     @ManyToOne
     @JoinColumn(name="OWNER_MEMBER_ID")
     private OwnerMember ownerMember;
-
 
     public void updateRecruit(String title, String content, String startDate, String endDate, String favor) {
         if (title != null && !title.isEmpty()) {
@@ -51,8 +61,4 @@ public class Recruit {
             this.favor = favor;
         }
     }
-
-
-
-
 }

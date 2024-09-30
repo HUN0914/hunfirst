@@ -3,10 +3,13 @@ package hello.hunfirst.controller;
 import hello.hunfirst.entity.Recruit;
 import hello.hunfirst.repository.RecruitRepository;
 import hello.hunfirst.service.RecruitService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -22,24 +25,52 @@ public class RecruitController {
 
     // 전체 게시판 리스트 조회
     @GetMapping
-    public String recruits(Model model){
+    public String recruits(Model model) {
         List<Recruit> boards = recruitService.findAll();  // Board 목록 가져오기
         model.addAttribute("boards", boards);
         return "recruit/recruits"; // 게시판 목록 페이지
     }
 
     @GetMapping("/add")
-    public String addForm(Recruit recruit){
+    public String addForm(Recruit recruit) {
         return "/recruit/addForm";
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addRecruit(@RequestBody Recruit recruit) {
+    public ResponseEntity<String> addRecruit(@Valid @RequestBody Recruit recruit, BindingResult bindingResult) {
+        // 유효성 검사에서 오류가 발생하면 적절한 응답 반환
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("비어있는 항목이 있습니다.");
+        }
+
+        // 유효성 검사를 통과한 경우 저장
         recruitService.save(recruit);
         return ResponseEntity.ok("Recruit saved successfully");
     }
 
-    // @GetMapping("/{recruitId}")
+    @GetMapping("/{recruitId}")
+    public String recruitDetails(@PathVariable Long recruitId, Model model) {
+        // RecruitService를 이용하여 recruitId로 Recruit 엔티티를 조회
+        Recruit recruit = recruitService.findById(recruitId);
+
+        // 모델에 Recruit 객체를 추가하여 뷰에서 사용할 수 있도록 설정
+        model.addAttribute("recruit", recruit);
+
+        // 상세 정보 페이지로 이동 (예: recruit/recruitDetail.html)
+        return "recruit/recruitDetail";
+    }
+
+    @DeleteMapping("/{recruitId}")
+    public ResponseEntity<String> deleteRecruit(@PathVariable Long recruitId) {
+        try {
+            recruitService.deleteById(recruitId);
+            return ResponseEntity.ok("성공적으로 삭제하였습니다.");
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제에 실패하였습니다");
+        }
+    }
+
 
 
 

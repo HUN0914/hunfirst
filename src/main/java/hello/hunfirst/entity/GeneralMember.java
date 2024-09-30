@@ -1,6 +1,7 @@
 package hello.hunfirst.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "General_Member") // 원하는 테이블 이름 지정
+@NotNull
 public class GeneralMember  {
 
     @Id
