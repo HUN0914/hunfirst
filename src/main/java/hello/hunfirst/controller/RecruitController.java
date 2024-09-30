@@ -4,12 +4,10 @@ import hello.hunfirst.entity.Recruit;
 import hello.hunfirst.repository.RecruitRepository;
 import hello.hunfirst.service.RecruitService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -36,20 +34,12 @@ public class RecruitController {
     }
 
     @PostMapping("/add")
-    public String addRecruit(Recruit recruit, RedirectAttributes redirectAttributes){
-        Recruit savedRecruit = recruitService.save(recruit);
-   //     redirectAttributes.addAttribute("recruitId", savedRecruit.getRecruitId());
-   //     redirectAttributes.addAttribute("status", true);
-        return "redirect:/recruit/recruits";
+    public ResponseEntity<String> addRecruit(@RequestBody Recruit recruit) {
+        recruitService.save(recruit);
+        return ResponseEntity.ok("Recruit saved successfully");
     }
 
-//    @GetMapping("/{recruitId}")
-//    public String recruitDetail(@PathVariable Long recruitId, Model model) {
-//        Recruit recruit = recruitRepository.findById(recruitId)
-//                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 게시물입니다."));
-//        model.addAttribute("recruit", recruit);
-//        return "recruit/recruitDetail";
-//    }
+    // @GetMapping("/{recruitId}")
 
 
 

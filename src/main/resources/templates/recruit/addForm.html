@@ -67,37 +67,68 @@
 
 <div class="form-container">
     <h2>게시글 등록</h2>
-    <form th:action="@{/recruit/recruits/add}" method="post" th:object="${recruit}">
+    <form id="recruitForm">
         <div class="form-group">
             <label for="title">제목</label>
-            <input type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요" required>
+            <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
         </div>
 
         <div class="form-group">
             <label for="startDate">시작 날짜</label>
-            <input type="date" id="startDate" th:field="*{startDate}" required>
+            <input type="date" id="startDate" name="startDate" required>
         </div>
 
         <div class="form-group">
             <label for="endDate">종료 날짜</label>
-            <input type="date" id="endDate" th:field="*{endDate}" required>
+            <input type="date" id="endDate" name="endDate" required>
         </div>
 
         <div class="form-group">
             <label for="content">내용</label>
-            <textarea id="content" th:field="*{content}" placeholder="내용을 입력하세요" rows="5" required></textarea>
+            <textarea id="content" name="content" placeholder="내용을 입력하세요" rows="5" required></textarea>
         </div>
 
         <div class="form-group">
             <label for="favor">선호도</label>
-            <input type="text" id="favor" th:field="*{favor}" placeholder="선호도를 입력하세요" required>
+            <input type="text" id="favor" name="favor" placeholder="선호도를 입력하세요" required>
         </div>
 
         <div class="form-actions">
-            <button type="submit">등록하기</button>
+            <button type="button" onclick="submitRecruitForm()">등록하기</button>
         </div>
     </form>
 </div>
+
+<script>
+    function submitRecruitForm() {
+        // 폼 데이터 수집
+        const recruit = {
+            title: document.getElementById('title').value,
+            startDate: document.getElementById('startDate').value,
+            endDate: document.getElementById('endDate').value,
+            content: document.getElementById('content').value,
+            favor: document.getElementById('favor').value
+        };
+
+        // AJAX 요청 보내기
+        fetch('/recruit/recruits/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(recruit)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Recruit saved successfully');
+                    window.location.href = '/recruit/recruits';
+                } else {
+                    alert('Error saving recruit');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
 
 </body>
 </html>
