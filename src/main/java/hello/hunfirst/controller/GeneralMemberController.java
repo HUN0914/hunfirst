@@ -62,6 +62,8 @@ public class GeneralMemberController {
             HttpSession session = request.getSession();
             session.setAttribute(SessionConst.LOGIN_MEMBER, checkId.get());
 
+            log.info("로그인 성공: {}", session.getAttribute(SessionConst.LOGIN_MEMBER)); // 세션에 저장된 로그인 정보 확인
+
             // 리다이렉트 구조 짜야함
             return "redirect:/recruit/recruits";
 
@@ -72,5 +74,15 @@ public class GeneralMemberController {
             model.addAttribute("loginError", "잘못된 접근입니다.");
             return "login/loginForm";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if(session !=null){
+            session.invalidate();
+        }
+
+        return "redirect:/";
     }
 }

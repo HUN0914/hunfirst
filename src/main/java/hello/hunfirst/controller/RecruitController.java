@@ -36,9 +36,12 @@ public class RecruitController {
         return "/recruit/addForm";
     }
 
+    /*
+    @Notnull, 이런거 유효성 검사하려면
+    받는 객체 앞에 @Valid 어노테이션 (유효성 검사) 붙여줘야 함.
+     */
     @PostMapping("/add")
     public ResponseEntity<String> addRecruit(@Valid @RequestBody Recruit recruit, BindingResult bindingResult) {
-        // 유효성 검사에서 오류가 발생하면 적절한 응답 반환
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("비어있는 항목이 있습니다.");
         }

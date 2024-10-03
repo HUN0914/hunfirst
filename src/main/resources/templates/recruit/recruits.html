@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Recruit 게시글 목록</title>
+    <title>Recruit 알바 게시판</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,9 +19,20 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
         h2 {
             text-align: center;
             color: #333;
+        }
+
+        .logout {
+            text-align: right;
         }
 
         table {
@@ -61,7 +72,13 @@
 <body>
 
 <div class="container">
-    <h2>게시글 목록</h2>
+    <div class="header">
+        <h2>알바 게시글 목록</h2>
+        <!-- 로그아웃 링크 추가 -->
+        <div class="logout">
+            <a th:href="@{/logout}">로그아웃</a>
+        </div>
+    </div>
 
     <table>
         <thead>
