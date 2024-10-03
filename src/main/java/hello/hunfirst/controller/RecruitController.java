@@ -1,34 +1,48 @@
 package hello.hunfirst.controller;
 
+import hello.hunfirst.entity.GeneralMember;
 import hello.hunfirst.entity.Recruit;
 import hello.hunfirst.repository.RecruitRepository;
 import hello.hunfirst.service.RecruitService;
+import hello.hunfirst.session.SessionConst;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/recruit/recruits")
+@Slf4j
 public class RecruitController {
 
-    private final RecruitRepository recruitRepository;
     private final RecruitService recruitService;
 
     // 전체 게시판 리스트 조회
     @GetMapping
-    public String recruits(Model model) {
-        List<Recruit> boards = recruitService.findAll();  // Board 목록 가져오기
-        model.addAttribute("boards", boards);
-        return "recruit/recruits"; // 게시판 목록 페이지
+    public String recruits(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+
+        if(session!=null) {
+            GeneralMember loginedMember = (GeneralMember) session.getAttribute(SessionConst.LOGIN_MEMBER);
+            model.addAttribute("name", loginedMember.getName());
+            List<Recruit> boards = recruitService.findAll();  // Board 목록 가져오기
+            model.addAttribute("boards", boards);
+            return "recruit/recruits"; // 게시판 목록 페이지
+        }
+        else {
+            return "redirect:/";
+        }
+
     }
 
     @GetMapping("/add")
@@ -45,7 +59,6 @@ public class RecruitController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("비어있는 항목이 있습니다.");
         }
-
         // 유효성 검사를 통과한 경우 저장
         recruitService.save(recruit);
         return ResponseEntity.ok("Recruit saved successfully");
