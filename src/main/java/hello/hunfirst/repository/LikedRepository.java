@@ -12,10 +12,13 @@ public interface LikedRepository extends JpaRepository<Liked, Long> {
 
     //특정 사용자 특정 게시글 좋아요 했는지 확인
     Optional<Liked> findByGeneralMemberAndRecruit(GeneralMember generalMember, Recruit recruit);
-
     //게시글 대한 좋아요 갯수 반환
     Long countByRecruit(Recruit recruit);
-
     List<Liked> findByGeneralMember(GeneralMember generalMember);
 
+    /*
+    연관관계 매핑으로 인해
+    이 쿼리는 liked 숫자를 갖고오는 쿼리로 작성된다.
+     */
+    long countByRecruit_RecruitId(Long recruitId);
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Recruit Detail</title>
+    <title>구인 공고</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,6 @@
             height: 100vh;
         }
 
-        .detail-container {
         .detail-container {
             background-color: #fff;
             padding: 30px;
@@ -104,21 +103,44 @@
         <span class="detail-value" th:text="${recruit.favor ?: 'N/A'}">N/A</span>
     </div>
 
+    <!-- 좋아요 수 표시 -->
+    <div class="detail-group">
+        <label>Likes:</label>
+        <span id="like-count">0</span>
+    </div>
+
     <!-- Button group for actions -->
     <div class="button-group">
-        <button onclick="editRecruit()">Edit</button>
+        <button onclick="editRecruit()">수정</button>
         <button class="delete-btn" onclick="deleteRecruit()">Delete</button>
+    </div>
+
+    <!-- 좋아요 및 뒤로가기 버튼 추가 -->
+    <div class="button-group">
+        <button id="like-button" onclick="likeRecruit()">좋아요</button>
+        <button id="unlike-button" onclick="unlikeRecruit()">싫어요</button>
+        <button onclick="goBack()">뒤로 가기</button>
     </div>
 </div>
 
 <script>
+    const urlParts = window.location.pathname.split('/');
+    const recruitId = urlParts[urlParts.length - 1];
+
+    // 페이지 로드 시 좋아요 수 가져오기
+    window.onload = function() {
+        fetch(`/api/likes/${recruitId}/count`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('like-count').innerText = data;
+            })
+            .catch(error => console.error('Error fetching like count:', error));
+    };
+
     function deleteRecruit() {
         if (!confirm('Are you sure you want to delete this recruit?')) {
             return;
         }
-
-        const urlParts = window.location.pathname.split('/');
-        const recruitId = urlParts[urlParts.length - 1];
 
         fetch(`/recruit/recruits/${recruitId}`, {
             method: 'DELETE',
@@ -128,8 +150,8 @@
         })
             .then(response => {
                 if (response.ok) {
-                    alert('성공적으로 삭제하였습니다.');
-                    window.location.href = '/recruit/recruits'; // Redirect to the list page
+                    alert('Successfully deleted.');
+                    window.location.href = '/recruit/recruits';
                 } else {
                     return response.text().then(text => {
                         throw new Error(text);
@@ -138,16 +160,75 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('삭제하는데 실패하였습니다.: ' + error.message);
+                alert('Failed to delete: ' + error.message);
             });
     }
 
     function editRecruit() {
-        const urlParts = window.location.pathname.split('/');
-        const recruitId = urlParts[urlParts.length - 1];
-
-        // Redirect to the edit page (you need to implement the edit page separately)
         window.location.href = `/recruit/recruits/edit/${recruitId}`;
+    }
+
+    // 좋아요 기능
+    function likeRecruit() {
+        fetch(`/api/likes/${recruitId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    updateLikeCount();
+                    alert('Liked successfully');
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to like: ' + error.message);
+            });
+    }
+
+    // 좋아요 취소 기능
+    function unlikeRecruit() {
+        fetch(`/api/likes/${recruitId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    updateLikeCount();
+                    alert('Unliked successfully');
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(text);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to unlike: ' + error.message);
+            });
+    }
+
+    // 좋아요 수 업데이트
+    function updateLikeCount() {
+        fetch(`/api/likes/${recruitId}/count`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('like-count').innerText = data;
+            })
+            .catch(error => console.error('Error updating like count:', error));
+    }
+
+    // 뒤로가기 기능
+    function goBack() {
+        window.location.href = '/recruit/recruits';
     }
 </script>
 </body>

@@ -15,7 +15,7 @@ import java.util.List;
 public class GeneralMember  {
 
     @Id
-    @Column(name = "USER_ID", updatable = false, nullable = false)
+    @Column(name = "USER_ID", updatable = false, nullable = false, unique = true)
     private String userId; // 자동 생성되는 식별자
 
     private String password;
