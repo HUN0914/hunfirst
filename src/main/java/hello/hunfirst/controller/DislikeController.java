@@ -1,6 +1,7 @@
 package hello.hunfirst.controller;
 
 import hello.hunfirst.entity.GeneralMember;
+import hello.hunfirst.service.DislikedService;
 import hello.hunfirst.service.LikedService;
 import hello.hunfirst.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,11 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/likes")
+@RequestMapping("/api/dislikes")
 @RequiredArgsConstructor
-public class LikeController {
+public class DislikeController {
 
-    private final LikedService likedService;
+    private final DislikedService dislikedService;
 
     @PostMapping("/{recruitId}")
     public ResponseEntity<String> likeRecruit(@PathVariable Long recruitId, HttpServletRequest request) {
@@ -25,15 +26,15 @@ public class LikeController {
         }
 
         String userId = generalMember.getUserId();
-        likedService.likeRecruit(recruitId, userId);
+        dislikedService.dislikeRecruit(recruitId, userId);
 
-        return ResponseEntity.ok("좋아요가 눌렸습니다.");
+        return ResponseEntity.ok("싫어요가 눌렸습니다.");
     }
 
 
     @GetMapping("{recruitId}/count")
     public ResponseEntity<Long> getLikeCount(@PathVariable Long recruitId){
-        long likeCount= likedService.getLikeCount(recruitId);
+        long likeCount= dislikedService.getLikeCount(recruitId);
         return ResponseEntity.ok(likeCount);
     }
 }

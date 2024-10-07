@@ -27,6 +27,9 @@ public class GeneralMember  {
     private List<Liked> likedList;
 
     @OneToMany(mappedBy = "generalMember")
+    private List<DisLiked> disLikedList;
+
+    @OneToMany(mappedBy = "generalMember")
     private List<Inquiry> inquiryList;
 
     @OneToMany(mappedBy = "generalMember")

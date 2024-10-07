@@ -109,16 +109,22 @@
         <span id="like-count">0</span>
     </div>
 
+    <!-- 싫어요 수 표시 -->
+    <div class="detail-group">
+        <label>Dislikes:</label>
+        <span id="dislike-count">0</span>
+    </div>
+
     <!-- Button group for actions -->
     <div class="button-group">
         <button onclick="editRecruit()">수정</button>
         <button class="delete-btn" onclick="deleteRecruit()">Delete</button>
     </div>
 
-    <!-- 좋아요 및 뒤로가기 버튼 추가 -->
+    <!-- 좋아요 및 싫어요 버튼 추가 -->
     <div class="button-group">
         <button id="like-button" onclick="likeRecruit()">좋아요</button>
-        <button id="unlike-button" onclick="unlikeRecruit()">싫어요</button>
+        <button id="dislike-button" onclick="dislikeRecruit()">싫어요</button>
         <button onclick="goBack()">뒤로 가기</button>
     </div>
 </div>
@@ -127,14 +133,10 @@
     const urlParts = window.location.pathname.split('/');
     const recruitId = urlParts[urlParts.length - 1];
 
-    // 페이지 로드 시 좋아요 수 가져오기
+    // 페이지 로드 시 좋아요 및 싫어요 수 가져오기
     window.onload = function() {
-        fetch(`/api/likes/${recruitId}/count`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('like-count').innerText = data;
-            })
-            .catch(error => console.error('Error fetching like count:', error));
+        updateLikeCount();
+        updateDislikeCount();
     };
 
     function deleteRecruit() {
@@ -192,18 +194,18 @@
             });
     }
 
-    // 좋아요 취소 기능
-    function unlikeRecruit() {
-        fetch(`/api/likes/${recruitId}`, {
-            method: 'DELETE',
+    // 싫어요 기능
+    function dislikeRecruit() {
+        fetch(`/api/dislikes/${recruitId}`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
             .then(response => {
                 if (response.ok) {
-                    updateLikeCount();
-                    alert('Unliked successfully');
+                    updateDislikeCount();
+                    alert('Disliked successfully');
                 } else {
                     return response.text().then(text => {
                         throw new Error(text);
@@ -212,7 +214,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Failed to unlike: ' + error.message);
+                alert('Failed to dislike: ' + error.message);
             });
     }
 
@@ -224,6 +226,16 @@
                 document.getElementById('like-count').innerText = data;
             })
             .catch(error => console.error('Error updating like count:', error));
+    }
+
+    // 싫어요 수 업데이트
+    function updateDislikeCount() {
+        fetch(`/api/dislikes/${recruitId}/count`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('dislike-count').innerText = data;
+            })
+            .catch(error => console.error('Error updating dislike count:', error));
     }
 
     // 뒤로가기 기능

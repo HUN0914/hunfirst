@@ -17,28 +17,31 @@ public class Recruit {
     @Column(name = "RECRUIT_ID")
     private Long recruitId;
 
-    @NotBlank(message = "Title is mandatory")
+    @NotBlank(message = "제목은 빈칸이 될 수 없습니다")
     @Column(nullable = false)
     private String title;
 
-    @NotBlank(message = "Start Date is mandatory")
+    @NotBlank(message = "시작일은 빈칸이 될 수 없습니다")
     @Column(nullable = false)
     private String startDate;
 
-    @NotBlank(message = "End Date is mandatory")
+    @NotBlank(message = "종료일은 빈칸이 될 수 없습니다")
     @Column(nullable = false)
     private String endDate;
 
-    @NotBlank(message = "Content is mandatory")
+    @NotBlank(message = "내용은 빈칸이 될 수 없습니다")
     @Column(nullable = false)
     private String content;
 
-    @NotBlank(message = "Favor is mandatory")
+    @NotBlank(message = "선호도는 빈칸이 될 수 없습니다")
     @Column(nullable = false)
     private String favor;
 
     @OneToMany(mappedBy = "recruit") // Like 엔티티의 recruit 필드와 연결
     private List<Liked> likedList;
+
+    @OneToMany(mappedBy = "recruit") // dislike 엔티티의 recruit 필드와 연결
+    private List<DisLiked> disLikedList;
 
     @ManyToOne
     @JoinColumn(name="OWNER_MEMBER_ID")

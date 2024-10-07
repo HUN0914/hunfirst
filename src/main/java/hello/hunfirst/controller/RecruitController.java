@@ -61,7 +61,7 @@ public class RecruitController {
         }
         // 유효성 검사를 통과한 경우 저장
         recruitService.save(recruit);
-        return ResponseEntity.ok("Recruit saved successfully");
+        return ResponseEntity.ok("공고가 성공적으로 등록되었습니다.");
     }
 
     @GetMapping("/{recruitId}")
