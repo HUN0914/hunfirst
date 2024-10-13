@@ -1,59 +1,57 @@
 package hello.hunfirst.controller;
 
-import hello.hunfirst.entity.GeneralMember;
-import hello.hunfirst.repository.GeneralMemberRepository;
+import hello.hunfirst.entity.OwnerMember;
+import hello.hunfirst.repository.OwnerMemberRepository;
 import hello.hunfirst.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j; // Lombok의 @Slf4j 어노테이션 import
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class GeneralMemberController {
+public class OwnerMemberController {
 
-    private final GeneralMemberRepository memberRepository;
+    private final OwnerMemberRepository ownerMemberRepository;
 
-    @GetMapping("/general/signupForm")
+    // /login/signupForm -> generalmember로 바꾸기
+    @GetMapping("/login/ownerSignupForm")
     public String signupForm(Model model) {
-        model.addAttribute("generalMember", new GeneralMember());
-        return "/general/signupForm";
+        model.addAttribute("ownerMember", new OwnerMember());
+        return "login/ownerSignupForm";
     }
 
-    @PostMapping("/general/signupForm")
-    public String signup(@ModelAttribute GeneralMember generalMember, Model model) {
-        memberRepository.save(generalMember);
-        model.addAttribute("generalMember", generalMember);
+    @PostMapping("/login/ownerSignupForm")
+    public String signup(@ModelAttribute OwnerMember ownerMember, Model model) {
+
+        log.info("User ID: {}", ownerMember.getOwnerId());
+        log.info("Name: {}", ownerMember.getName());
+        log.info("Password: {}",ownerMember.getPassword());
+        log.info("Age: {}", ownerMember.getOwnerNum());
+
+        ownerMemberRepository.save(ownerMember);
+        model.addAttribute("ownerMember", ownerMember);
         return "redirect:/";
     }
 
-
-    @GetMapping("/general/loginForm")
-    public String InitLoginForm(Model model) {
-        model.addAttribute("generalMember", new GeneralMember());
-        return "general/loginForm";  // 경로 확인
-    }
-
-
-    @PostMapping("/general/loginForm")
+    @PostMapping("/login/ownerLoginForm")
     public String login(HttpServletRequest request, Model model) {
-        String userId = request.getParameter("userId");
+        String ownerId = request.getParameter("ownerId");
         String password = request.getParameter("password");
 
-        log.info("userId = {}", userId);
+        log.info("userId = {}", ownerId);
         log.info("password = {}", password);
 
         // 사용자 조회
-        Optional<GeneralMember> checkId = memberRepository.findById(userId);
+        Optional<OwnerMember> checkId = ownerMemberRepository.findById(ownerId);
 
         if (checkId.isPresent() && checkId.get().getPassword().equals(password)) {
             HttpSession session = request.getSession();
@@ -69,9 +67,8 @@ public class GeneralMemberController {
             log.warn("Login failed.");
 
             model.addAttribute("loginError", "잘못된 접근입니다.");
-            return "general/loginForm";
+            return "login/ownerLoginForm";
         }
     }
-
 
 }

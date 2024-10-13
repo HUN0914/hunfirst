@@ -58,19 +58,19 @@ public class GeneralMemberService {
         generalRepository.deleteById(id);
     }
 
-    public void addLike(Long recruitId, String memberId){
-        GeneralMember generalMember = generalRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
-        Recruit recruit = recruitRepository.findById(recruitId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
-
-
-       Optional<Liked> existingLike = likedRepository.findByGeneralMemberAndRecruit(generalMember, recruit);
-        if(existingLike.isPresent()){
-            throw new IllegalArgumentException("이미 좋아요를 누르셨습니다.");
-        }
-
-        Liked liked =new Liked(generalMember, recruit);
-        likedRepository.save(liked);
-    }
+//    public void addLike(Long recruitId, String memberId){
+//        GeneralMember generalMember = generalRepository.findById(memberId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+//        Recruit recruit = recruitRepository.findById(recruitId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
+//
+//
+//       Optional<Liked> existingLike = likedRepository.findByGeneralMemberAndRecruit(generalMember, recruit);
+//        if(existingLike.isPresent()){
+//            throw new IllegalArgumentException("이미 좋아요를 누르셨습니다.");
+//        }
+//
+//        Liked liked =new Liked(generalMember, recruit);
+//        likedRepository.save(liked);
+//    }
 }
