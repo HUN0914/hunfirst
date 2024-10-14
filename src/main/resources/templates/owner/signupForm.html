@@ -81,10 +81,10 @@
 
 <div class="signup-container">
     <h2>회원 가입</h2>
-    <form th:action="@{/general/signupForm}" method="post" th:object="${generalMember}">
+    <form th:action="@{/owner/signupForm}" method="post" th:object="${ownerMember}">
         <div class="form-group">
-            <label for="userId">ID</label>
-            <input type="text" id="userId" th:field="*{userId}" placeholder="Enter your ID" required>
+            <label for="ownerId">ID</label>
+            <input type="text" id="ownerId" th:field="*{ownerId}" placeholder="Enter your ID" required>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
@@ -95,12 +95,8 @@
             <input type="text" id="name" th:field="*{name}" placeholder="Enter your name" required>
         </div>
         <div class="form-group">
-            <label for="age">Age</label>
-            <input type="number" id="age" th:field="*{age}" placeholder="Enter your age" required>
-        </div>
-        <div class="form-group">
-            <label for="location">Location</label>
-            <input type="text" id="location" th:field="*{location}" placeholder="Enter your location" required>
+            <label for="ownerNum">Owner Number</label>
+            <input type="number" id="ownerNum" th:field="*{ownerNum}" placeholder="Enter your owner number" required>
         </div>
         <button type="submit" class="signup-btn">Sign Up</button>
     </form>

@@ -1,3 +1,5 @@
+package hello.hunfirst.webconfig;
+
 import hello.hunfirst.Interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

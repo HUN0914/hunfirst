@@ -23,13 +23,19 @@ public class OwnerMemberController {
     private final OwnerMemberRepository ownerMemberRepository;
 
     // /login/signupForm -> generalmember로 바꾸기
-    @GetMapping("/login/ownerSignupForm")
+    @GetMapping("/owner/signupForm")
     public String signupForm(Model model) {
         model.addAttribute("ownerMember", new OwnerMember());
-        return "login/ownerSignupForm";
+        return "owner/loginForm";
     }
 
-    @PostMapping("/login/ownerSignupForm")
+    @GetMapping("/owner/loginForm")
+    public String loginForm(Model model){
+        model.addAttribute("ownerMember", new OwnerMember());
+        return "owner/loginForm";
+    }
+
+    @PostMapping("/owner/signupForm")
     public String signup(@ModelAttribute OwnerMember ownerMember, Model model) {
 
         log.info("User ID: {}", ownerMember.getOwnerId());
@@ -42,7 +48,7 @@ public class OwnerMemberController {
         return "redirect:/";
     }
 
-    @PostMapping("/login/ownerLoginForm")
+    @PostMapping("/owner/loginForm")
     public String login(HttpServletRequest request, Model model) {
         String ownerId = request.getParameter("ownerId");
         String password = request.getParameter("password");
@@ -59,7 +65,6 @@ public class OwnerMemberController {
 
             log.info("로그인 성공: {}", session.getAttribute(SessionConst.LOGIN_MEMBER)); // 세션에 저장된 로그인 정보 확인
 
-            // 리다이렉트 구조 짜야함
             return "redirect:/recruit/recruits";
 
 
@@ -67,7 +72,7 @@ public class OwnerMemberController {
             log.warn("Login failed.");
 
             model.addAttribute("loginError", "잘못된 접근입니다.");
-            return "login/ownerLoginForm";
+            return "owner/loginForm";
         }
     }
 

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+    .login-container {
+      width: 300px;
+      margin: 100px auto;
+      padding: 30px;
+      background-color: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    .input-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      color: #333;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .login-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .login-btn:hover {
+      background-color: #45a049;
+    }
+    .signup-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .signup-link a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>Login</h2>
+
+  <!-- 에러 메시지를 표시 -->
+  <div th:if="${loginError}" class="error-message">
+    <p th:text="${loginError}"></p>
+  </div>
+
+
+  <!-- 로그인 폼 제출 -->
+  <form th:action="@{/owner/loginForm}" method="post">
+    <div class="input-group">
+      <label for="ownerId">ID:</label>
+      <input type="text" id="ownerId" name="ownerId" required>
+    </div>
+    <div class="input-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit" class="login-btn">Login</button>
+  </form>
+
+  <div class="signup-link">
+    <p>회원이 아니십니까? <a th:href="@{/owner/signupForm}">회원 가입하려면 클릭하세요.</a></p>
+  </div>
+  <button class="back-btn" onclick="location.href='/'">뒤로가기</button>
+
+</div>
+
+</body>
+</html>
