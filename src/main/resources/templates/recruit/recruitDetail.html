@@ -103,6 +103,19 @@
         <span class="detail-value" th:text="${recruit.favor ?: 'N/A'}">N/A</span>
     </div>
 
+    <!-- 장기/단기 선택 -->
+    <div class="detail-group">
+        <label>Recruit Type:</label>
+        <div>
+            <label>
+                <input type="checkbox" name="recruitType" value="장기" th:checked="${recruit.favor == '장기'}"> 장기
+            </label>
+            <label>
+                <input type="checkbox" name="recruitType" value="단기" th:checked="${recruit.favor == '단기'}"> 단기
+            </label>
+        </div>
+    </div>
+
     <!-- 좋아요 수 표시 -->
     <div class="detail-group">
         <label>Likes:</label>
