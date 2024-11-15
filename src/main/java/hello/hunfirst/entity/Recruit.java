@@ -1,5 +1,6 @@
 package hello.hunfirst.entity;
 
+import hello.hunfirst.RecruitTime;
 import hello.hunfirst.entity.Liked;
 import hello.hunfirst.entity.OwnerMember;
 import jakarta.persistence.*;
@@ -46,6 +47,8 @@ public class Recruit {
     @ManyToOne
     @JoinColumn(name="OWNER_MEMBER_ID")
     private OwnerMember ownerMember;
+
+    private RecruitTime recruitTime;
 
     public void updateRecruit(String title, String content, String startDate, String endDate, String favor) {
         if (title != null && !title.isEmpty()) {
