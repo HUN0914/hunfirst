@@ -3,38 +3,86 @@
 <head>
     <title>Recruit 알바 게시판</title>
     <style>
+        /* 공통 스타일 */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            color: #333;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 900px;
+            margin: 50px auto;
             background-color: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
+        /* 헤더 스타일 */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            padding: 10px 20px;
+            border-bottom: 2px solid #eaeaea;
         }
 
         h2 {
+            font-size: 24px;
+            margin: 0;
+            color: #2d5f2e; /* 네이버 녹색 느낌 */
+        }
+
+        .logout span {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .logout a {
+            font-size: 14px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .logout a:hover {
+            text-decoration: underline;
+        }
+
+        /* 검색 폼 */
+        .search-form {
             text-align: center;
-            color: #333;
+            margin: 20px 0;
         }
 
-        .logout {
-            text-align: right;
+        .search-form input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        .search-form button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 20px;
+            background-color: #2d5f2e;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .search-form button:hover {
+            background-color: #255021;
+        }
+
+        /* 테이블 스타일 */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -45,27 +93,59 @@
             border: 1px solid #ddd;
         }
 
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-
         th {
             background-color: #f4f4f4;
+            font-size: 14px;
+            padding: 10px;
+            text-align: center;
         }
 
+        td {
+            font-size: 14px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        td a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+        /* 하단 링크 */
         .action-links {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
         }
 
-        a {
+        .action-links a {
+            padding: 10px 20px;
+            border: 1px solid #2d5f2e;
+            border-radius: 20px;
+            background-color: #2d5f2e;
+            color: white;
+            font-size: 14px;
             text-decoration: none;
-            color: #007BFF;
+            cursor: pointer;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .action-links a:hover {
+            background-color: #255021;
+        }
+
+        /* 반응형 */
+        @media (max-width: 600px) {
+            .search-form input[type="text"] {
+                width: 100%;
+            }
+
+            table th, table td {
+                font-size: 12px;
+                padding: 5px;
+            }
         }
     </style>
 </head>
@@ -73,12 +153,18 @@
 
 <div class="container">
     <div class="header">
-        <h2>알바 게시글 목록</h2>
-        <!-- 로그인한 사용자 이름과 로그아웃 링크 -->
+        <h2>Recruit 알바 게시판</h2>
         <div class="logout">
-            <span th:text="'어서오세요, [' + ${name} + ']님!  '"></span>  <!-- 사용자 이름 표시 -->
+            <span th:text="'어서오세요, [' + ${name} + ']님!'"></span>
             <a th:href="@{/logout}">로그아웃</a>
         </div>
+    </div>
+
+    <div class="search-form">
+        <form th:action="@{/recruit/recruits/search}" method="get">
+            <input type="text" name="title" placeholder="제목으로 검색">
+            <button type="submit">검색</button>
+        </form>
     </div>
 
     <table>
@@ -93,8 +179,7 @@
         </tr>
         </thead>
         <tbody>
-        <!-- Recruit 목록을 반복하며 테이블에 출력 -->
-        <tr th:each="recruit : ${boards}">
+        <tr th:each="recruit : ${recruits}">
             <td th:text="${recruit.title}">제목</td>
             <td th:text="${recruit.startDate}">시작 날짜</td>
             <td th:text="${recruit.endDate}">종료 날짜</td>
