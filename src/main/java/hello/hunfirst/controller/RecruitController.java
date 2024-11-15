@@ -35,8 +35,8 @@ public class RecruitController {
         if(session!=null) {
             GeneralMember loginedMember = (GeneralMember) session.getAttribute(SessionConst.LOGIN_MEMBER);
             model.addAttribute("name", loginedMember.getName());
-            List<Recruit> boards = recruitService.findAll();  // Board 목록 가져오기
-            model.addAttribute("boards", boards);
+            List<Recruit> recruits = recruitService.findAll();  // Board 목록 가져오기
+            model.addAttribute("recruits", recruits);
             return "recruit/recruits"; // 게시판 목록 페이지
         }
         else {
@@ -87,7 +87,15 @@ public class RecruitController {
         }
     }
 
+    @GetMapping("/search")
+    public String searchByTitle(@RequestParam("title") String title, Model model) {
+        List<Recruit> searchResults = recruitService.searchTitleContaining(title);
 
+        model.addAttribute("recruits", searchResults);
+        model.addAttribute("searchKeyword", title);
+
+        return "recruit/recruits";
+    }
 
 
 }
