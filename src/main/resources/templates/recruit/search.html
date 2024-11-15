@@ -1,10 +1,200 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Recruit 알바 게시판</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 50px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      border-bottom: 2px solid #eaeaea;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin: 0;
+      color: #2d5f2e;
+    }
+
+    .logout span {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .logout a {
+      font-size: 14px;
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    .logout a:hover {
+      text-decoration: underline;
+    }
+
+    .search-form {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .search-form input[type="text"] {
+      width: 70%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 14px;
+      outline: none;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-form button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 20px;
+      background-color: #2d5f2e;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .search-form button:hover {
+      background-color: #255021;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f4f4f4;
+      font-size: 14px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    td {
+      font-size: 14px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    td a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    td a:hover {
+      text-decoration: underline;
+    }
+
+    .action-links {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .action-links a {
+      padding: 10px 20px;
+      border: 1px solid #2d5f2e;
+      border-radius: 20px;
+      background-color: #2d5f2e;
+      color: white;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .action-links a:hover {
+      background-color: #255021;
+    }
+
+    @media (max-width: 600px) {
+      .search-form input[type="text"] {
+        width: 100%;
+      }
+
+      table th, table td {
+        font-size: 12px;
+        padding: 5px;
+      }
+    }
+  </style>
 </head>
 <body>
-$END$
+
+<div class="container">
+  <div class="header">
+    <h2>Recruit 알바 게시판</h2>
+    <div class="logout">
+      <span th:text="'어서오세요, [' + ${name} + ']님!'"></span>
+      <a th:href="@{/logout}">로그아웃</a>
+    </div>
+  </div>
+
+  <div class="search-form">
+    <form th:action="@{/recruit/recruits/search}" method="get">
+      <input type="text" name="title" placeholder="제목으로 검색" th:value="${searchKeyword}">
+      <button type="submit">검색</button>
+    </form>
+  </div>
+
+  <div th:if="${searchKeyword}" style="text-align: center; margin-top: 10px;">
+    <p>"[[${searchKeyword}]]"에 대한 검색 결과입니다.</p>
+  </div>
+
+  <table>
+    <thead>
+    <tr>
+      <th>제목</th>
+      <th>시작 날짜</th>
+      <th>종료 날짜</th>
+      <th>내용</th>
+      <th>선호도</th>
+      <th>상세보기</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(recruits)}">
+      <td colspan="6" style="text-align: center;">검색 결과가 없습니다.</td>
+    </tr>
+    <tr th:each="recruit : ${recruits}">
+      <td th:text="${recruit.title}">제목</td>
+      <td th:text="${recruit.startDate}">시작 날짜</td>
+      <td th:text="${recruit.endDate}">종료 날짜</td>
+      <td th:text="${recruit.content}">내용</td>
+      <td th:text="${recruit.favor}">선호도</td>
+      <td><a th:href="@{/recruit/recruits/{recruitId}(recruitId=${recruit.recruitId})}">상세보기</a></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="action-links">
+    <a th:href="@{/recruit/recruits/add}">새 게시글 작성</a>
+  </div>
+</div>
+
 </body>
 </html>
