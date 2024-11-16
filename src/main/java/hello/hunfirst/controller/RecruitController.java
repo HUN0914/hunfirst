@@ -1,8 +1,8 @@
 package hello.hunfirst.controller;
 
 import hello.hunfirst.entity.GeneralMember;
+import hello.hunfirst.entity.OwnerMember;
 import hello.hunfirst.entity.Recruit;
-import hello.hunfirst.repository.RecruitRepository;
 import hello.hunfirst.service.RecruitService;
 import hello.hunfirst.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,9 @@ import java.util.List;
 @Slf4j
 public class RecruitController {
 
+    private Recruit recruit;
     private final RecruitService recruitService;
+    private GeneralMember generalMember;
 
     // 전체 게시판 리스트 조회
     @GetMapping
@@ -33,23 +35,37 @@ public class RecruitController {
         HttpSession session = request.getSession();
 
         if(session!=null) {
-            GeneralMember loginedMember = (GeneralMember) session.getAttribute(SessionConst.LOGIN_MEMBER);
-            model.addAttribute("name", loginedMember.getName());
-            List<Recruit> recruits = recruitService.findAll();  // Board 목록 가져오기
+            Object loginMember= session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+            if(loginMember instanceof GeneralMember generalMember) {
+                model.addAttribute("name", generalMember.getName());
+            } else if (loginMember instanceof OwnerMember ownerMember) {
+                model.addAttribute("name", ownerMember.getName());
+            }
+            else {
+                return "redirect:/";
+            }
+            List<Recruit> recruits = recruitService.findAll();
             model.addAttribute("recruits", recruits);
-            return "recruit/recruits"; // 게시판 목록 페이지
-        }
-        else {
-            return "redirect:/";
+            return "recruit/recruits";
         }
 
+        return "redirect:/";
     }
 
     @GetMapping("/add")
-    public String addForm(Recruit recruit) {
-        return "/recruit/addForm";
+    public String addForm(HttpServletRequest request, Model model) {
+        HttpSession session = request.getSession();
+        if (session != null) {
+            Object loginedMember = session.getAttribute(SessionConst.LOGIN_MEMBER);
+            if (loginedMember instanceof OwnerMember) {
+                return "/recruit/addForm";
+            }
+        }
+        // OwnerMember가 아닌 경우
+        model.addAttribute("errorMessage", "게시글 등록 권한이 없습니다.");
+        return "redirect:/recruit/recruits"; // 기존 게시판 페이지로 리다이렉트
     }
-
     /*
     @Notnull, 이런거 유효성 검사하려면
     받는 객체 앞에 @Valid 어노테이션 (유효성 검사) 붙여줘야 함.
@@ -96,6 +112,8 @@ public class RecruitController {
 
         return "recruit/recruits";
     }
+
+
 
 
 }
