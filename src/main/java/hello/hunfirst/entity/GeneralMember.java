@@ -41,4 +41,40 @@ public class GeneralMember  {
     public boolean checkPassword(String password){
         return this.password.equals(password);
     }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public Long getAge() {
+        return age;
+    }
+
+    public List<Liked> getLikedList() {
+        return likedList;
+    }
+
+    public List<DisLiked> getDisLikedList() {
+        return disLikedList;
+    }
+
+    public List<Inquiry> getInquiryList() {
+        return inquiryList;
+    }
+
+    public List<Comment> getCommentList() {
+        return commentList;
+    }
 }
