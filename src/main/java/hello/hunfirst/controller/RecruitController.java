@@ -62,7 +62,6 @@ public class RecruitController {
                 return "/recruit/addForm";
             }
         }
-        // OwnerMember가 아닌 경우
         model.addAttribute("errorMessage", "게시글 등록 권한이 없습니다.");
         return "redirect:/recruit/recruits"; // 기존 게시판 페이지로 리다이렉트
     }
@@ -93,9 +92,11 @@ public class RecruitController {
     }
 
     @DeleteMapping("/{recruitId}")
-    public ResponseEntity<String> deleteRecruit(@PathVariable Long recruitId) {
+    public ResponseEntity<String> deleteRecruit(HttpServletRequest request, @PathVariable Long recruitId) {
         try {
-            recruitService.deleteById(recruitId);
+            if (!checkUserId(request, recruitId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 권한이 없습니다.");
+            }            recruitService.deleteById(recruitId);
             return ResponseEntity.ok("성공적으로 삭제하였습니다.");
 
         } catch (Exception e) {
@@ -113,7 +114,23 @@ public class RecruitController {
         return "recruit/recruits";
     }
 
+    public boolean checkUserId(HttpServletRequest request, Long recruitId) {
+        HttpSession session = request.getSession(false);
+        if(session!=null) {
+            return false;
+        }
 
+        Object loginMember= session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        if(loginMember instanceof OwnerMember ownerMember) {
+
+            Recruit recruit= recruitService.findById(recruitId);
+
+            return ownerMember.getOwnerId().equals(recruit.getOwnerMember().getOwnerId());
+        }
+
+        return false;
+    }
 
 
 }
