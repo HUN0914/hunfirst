@@ -165,7 +165,7 @@
         })
             .then(response => {
                 if (response.ok) {
-                    alert('Successfully deleted.');
+                    alert('성공적으로 삭제 되었습니다.');
                     window.location.href = '/recruit/recruits';
                 } else {
                     return response.text().then(text => {

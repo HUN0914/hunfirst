@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>게시글 수정</title>
+  <style>
+    /* 동일한 스타일 유지 */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      max-width: 90%;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+      color: #333;
+    }
+
+    textarea {
+      resize: none;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #007BFF;
+      outline: none;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(45deg, #007BFF, #0056b3);
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #0056b3, #003d7a);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: 90%;
+      }
+
+      button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>게시글 수정</h2>
+  <form th:action="@{/recruit/recruits/edit}" method="post">
+    <!-- Hidden Field for ID -->
+    <input type="hidden" name="recruitId" th:value="${recruit.recruitId}" />
+
+    <div>
+      <label for="title">제목:</label>
+      <input type="text" id="title" name="title" th:value="${recruit.title}" required />
+    </div>
+    <div>
+      <label for="startDate">시작 날짜:</label>
+      <input type="date" id="startDate" name="startDate" th:value="${recruit.startDate}" required />
+    </div>
+    <div>
+      <label for="endDate">종료 날짜:</label>
+      <input type="date" id="endDate" name="endDate" th:value="${recruit.endDate}" required />
+    </div>
+    <div>
+      <label for="content">내용:</label>
+      <textarea id="content" name="content" th:text="${recruit.content}" rows="5" required></textarea>
+    </div>
+    <div>
+      <label for="favor">선호도:</label>
+      <input type="text" id="favor" name="favor" th:value="${recruit.favor}" required />
+    </div>
+    <div>
+      <button type="submit">수정 완료</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>

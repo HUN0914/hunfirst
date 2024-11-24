@@ -11,23 +11,24 @@ import java.util.List;
 @Entity
 @NotNull
 @Getter
+@Table(name="Owner_Member")
+@Data
 public class OwnerMember {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "OWNER_ID", updatable = false, nullable = false)
+   @Column(name = "OWNER_ID", updatable = false, nullable = false, unique = true)
     private String ownerId;
 
     private String password;
 
     private String name;
 
-    private Long ownerNum;
-
-    @OneToMany
-    @JoinColumn(name = "RECRUIT_ID")
+    @OneToMany(mappedBy = "ownerMember")
     private List<Recruit> recruitList;
+
+    public OwnerMember() {
+
+    }
 
     public boolean checkPassword(String password){
         return this.password.equals(password);
@@ -42,8 +43,9 @@ public class OwnerMember {
         this.name=name;
     }
 
-    public void updateownerNum(Long ownerNum) {
-        this.ownerNum=ownerNum;
+    public void addRecruit(Recruit recruit) {
+        this.recruitList.add(recruit);
     }
+
 
 }

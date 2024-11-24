@@ -4,6 +4,7 @@ import hello.hunfirst.RecruitTime;
 import hello.hunfirst.entity.Liked;
 import hello.hunfirst.entity.OwnerMember;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
@@ -44,18 +45,28 @@ public class Recruit {
     @OneToMany(mappedBy = "recruit") // dislike 엔티티의 recruit 필드와 연결
     private List<DisLiked> disLikedList;
 
-    @ManyToOne
-    @JoinColumn(name="OWNER_MEMBER_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "OWNER_ID")
     private OwnerMember ownerMember;
 
     private RecruitTime recruitTime;
 
-    public void updateRecruit(String title, String content, String startDate, String endDate, String favor) {
+    public Recruit(String title, String startDate, String endDate, String content, String favor, OwnerMember ownerMember) {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.content = content;
+        this.favor = favor;
+        this.ownerMember = ownerMember;
+    }
+
+    public Recruit() {
+
+    }
+
+    public void updateRecruit(String title, String startDate, String endDate, String content, String favor) {
         if (title != null && !title.isEmpty()) {
             this.title = title;
-        }
-        if (content != null && !content.isEmpty()) {
-            this.content = content;
         }
         if (startDate != null && !startDate.isEmpty()) {
             this.startDate = startDate;
@@ -63,8 +74,13 @@ public class Recruit {
         if (endDate != null && !endDate.isEmpty()) {
             this.endDate = endDate;
         }
+        if (content != null && !content.isEmpty()) {
+            this.content = content;
+        }
         if (favor != null && !favor.isEmpty()) {
             this.favor = favor;
         }
     }
+
+
 }

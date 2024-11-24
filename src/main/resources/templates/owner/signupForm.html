@@ -39,7 +39,7 @@
             margin-bottom: 5px;
         }
 
-        input[type="text"], input[type="password"], input[type="number"] {
+        input[type="text"], input[type="password"] {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -75,16 +75,25 @@
         .login-link a:hover {
             text-decoration: underline;
         }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
 <div class="signup-container">
     <h2>회원 가입</h2>
+    <!-- 에러 메시지 표시 -->
+    <div th:if="${signupError}" class="error" th:text="${signupError}"></div>
+
     <form th:action="@{/owner/signupForm}" method="post" th:object="${ownerMember}">
         <div class="form-group">
-            <label for="ownerId">ID</label>
-            <input type="text" id="ownerId" th:field="*{ownerId}" placeholder="Enter your ID" required>
+            <label for="ownerId">Owner ID</label>
+            <input type="text" id="ownerId" th:field="*{ownerId}" placeholder="Enter your Owner ID" required>
         </div>
         <div class="form-group">
             <label for="password">Password</label>
@@ -94,15 +103,11 @@
             <label for="name">Name</label>
             <input type="text" id="name" th:field="*{name}" placeholder="Enter your name" required>
         </div>
-        <div class="form-group">
-            <label for="ownerNum">Owner Number</label>
-            <input type="number" id="ownerNum" th:field="*{ownerNum}" placeholder="Enter your owner number" required>
-        </div>
         <button type="submit" class="signup-btn">Sign Up</button>
     </form>
 
     <div class="login-link">
-        <p>이미 회원이십니까? <a th:href="@{/static}">로그인하려면 클릭하세요.</a></p>
+        <p>이미 회원이십니까? <a th:href="@{/owner/loginForm}">로그인하려면 클릭하세요.</a></p>
     </div>
 </div>
 

@@ -1,12 +1,15 @@
 package hello.hunfirst.controller;
 
+import hello.hunfirst.dto.RecruitRequest;
 import hello.hunfirst.entity.GeneralMember;
 import hello.hunfirst.entity.OwnerMember;
 import hello.hunfirst.entity.Recruit;
+import hello.hunfirst.repository.RecruitRepository;
 import hello.hunfirst.service.RecruitService;
 import hello.hunfirst.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +28,7 @@ import java.util.List;
 @Slf4j
 public class RecruitController {
 
+    private final RecruitRepository recruitRepository;
     private Recruit recruit;
     private final RecruitService recruitService;
     private GeneralMember generalMember;
@@ -70,17 +74,27 @@ public class RecruitController {
     받는 객체 앞에 @Valid 어노테이션 (유효성 검사) 붙여줘야 함.
      */
     @PostMapping("/add")
-    public ResponseEntity<String> addRecruit(@Valid @RequestBody Recruit recruit, BindingResult bindingResult) {
+    public ResponseEntity<String> addRecruit(HttpServletRequest httpServletRequest,
+                                             @Valid @RequestBody Recruit recruitRequest,
+                                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("비어있는 항목이 있습니다.");
         }
-        // 유효성 검사를 통과한 경우 저장
-        recruitService.save(recruit);
-        return ResponseEntity.ok("공고가 성공적으로 등록되었습니다.");
+
+        HttpSession session = httpServletRequest.getSession();
+        Object loginMember = session.getAttribute(SessionConst.LOGIN_MEMBER);
+
+        if (loginMember instanceof OwnerMember ownerMember) {
+            recruitService.createRecruit(recruitRequest, ownerMember);
+            return ResponseEntity.ok("공고가 성공적으로 등록되었습니다.");
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("게시글 작성 권한이 없습니다.");
     }
 
     @GetMapping("/{recruitId}")
     public String recruitDetails(@PathVariable Long recruitId, Model model) {
+
         // RecruitService를 이용하여 recruitId로 Recruit 엔티티를 조회
         Recruit recruit = recruitService.findById(recruitId);
 
@@ -90,6 +104,7 @@ public class RecruitController {
         // 상세 정보 페이지로 이동 (예: recruit/recruitDetail.html)
         return "recruit/recruitDetail";
     }
+
 
     @DeleteMapping("/{recruitId}")
     public ResponseEntity<String> deleteRecruit(HttpServletRequest request, @PathVariable Long recruitId) {
@@ -102,6 +117,31 @@ public class RecruitController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제에 실패하였습니다");
         }
+
+    }
+
+    @GetMapping("/edit/{recruitId}")
+    public String editForm(HttpServletRequest request, @PathVariable Long recruitId, Model model) {
+        log.debug("editForm 메서드 호출됨. recruitId: {}", recruitId);
+
+        Recruit recruit = recruitService.findById(recruitId);
+        model.addAttribute("recruit", recruit);
+        return "recruit/edit"; // templates/recruit/edit.html로 이동
+    }
+    @PostMapping("/edit")
+    public String editRecruit(@ModelAttribute @Valid RecruitRequest recruitRequest,
+                              BindingResult bindingResult, Model model) {
+        log.debug("Received RecruitRequest: {}", recruitRequest);
+
+        if (bindingResult.hasErrors()) {
+            log.error("Binding errors: {}", bindingResult.getAllErrors());
+            model.addAttribute("recruit", recruitRequest);
+            return "recruit/edit"; // 에러 발생 시 수정 페이지로 다시 이동
+        }
+
+        recruitService.updateRecruit(recruitRequest);
+
+        return "redirect:/recruit/recruits/" + recruitRequest.getRecruitId();
     }
 
     @GetMapping("/search")
@@ -116,21 +156,28 @@ public class RecruitController {
 
     public boolean checkUserId(HttpServletRequest request, Long recruitId) {
         HttpSession session = request.getSession(false);
-        if(session!=null) {
+
+        if (session == null) {
+            log.warn("세션이 없습니다.");
             return false;
         }
 
-        Object loginMember= session.getAttribute(SessionConst.LOGIN_MEMBER);
+        Object loginMember = session.getAttribute(SessionConst.LOGIN_MEMBER);
+        if (loginMember instanceof OwnerMember ownerMember) {
+            Recruit recruit = recruitService.findById(recruitId);
 
-        if(loginMember instanceof OwnerMember ownerMember) {
+            if (recruit.getOwnerMember() == null) {
+                log.warn("게시글에 연결된 OwnerMember가 없습니다. recruitId={}", recruitId);
+                return false;
+            }
 
-            Recruit recruit= recruitService.findById(recruitId);
-
-            return ownerMember.getOwnerId().equals(recruit.getOwnerMember().getOwnerId());
+            boolean isOwner = ownerMember.getOwnerId().equals(recruit.getOwnerMember().getOwnerId());
+            log.debug("로그인 사용자와 게시글 작성자 일치 여부: {}", isOwner);
+            return isOwner;
         }
 
+        log.warn("로그인한 사용자가 OwnerMember가 아닙니다.");
         return false;
     }
-
 
 }
